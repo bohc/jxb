@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bohc.sh.entities.QlyFlyticket" table="flyticket">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="native" />
+        </id>
+        <property name="fltno" type="java.lang.String">
+            <column name="fltno" />
+        </property>
+        <property name="aireline" type="java.lang.String">
+            <column name="aireline" />
+        </property>
+        <property name="airtype" type="java.lang.String">
+            <column name="airtype" />
+        </property>
+        <property name="startcity" type="java.lang.String">
+            <column name="startcity" />
+        </property>
+        <property name="startcityjm" type="java.lang.String">
+            <column name="startcityjm" />
+        </property>
+        <property name="arrivecity" type="java.lang.String">
+            <column name="arrivecity" />
+        </property>
+        <property name="arrivecityjm" type="java.lang.String">
+            <column name="arrivecityjm" />
+        </property>
+        <property name="startairport" type="java.lang.String">
+            <column name="startairport" />
+        </property>
+        <property name="arriveairport" type="java.lang.String">
+            <column name="arriveairport" />
+        </property>
+        <property name="starttime" type="java.util.Date">
+            <column name="starttime" />
+        </property>
+        <property name="arrivetime" type="java.util.Date">
+            <column name="arrivetime" />
+        </property>
+        <property name="offsetrate" type="java.lang.String">
+            <column name="offsetrate" />
+        </property>
+        <property name="offsettime" type="java.lang.String">
+            <column name="offsettime" />
+        </property>
+        <property name="ticketprice" type="java.lang.Integer">
+            <column name="ticketprice" />
+        </property>
+        <property name="avgticketprice" type="java.lang.Integer">
+            <column name="avgticketprice" />
+        </property>
+        <property name="agent" type="java.lang.String">
+            <column name="agent" />
+        </property>
+        <property name="fetchdate" type="java.util.Date">
+            <column name="fetchdate" />
+        </property>
+        <property name="opttime" type="java.util.Date">
+            <column name="opttime" />
+        </property>
+        <property name="typetime" type="java.lang.String">
+            <column name="typetime" />
+        </property>
+        <property name="changeflyno" type="java.lang.String">
+            <column name="changeflyno" />
+        </property>
+        <property name="changecity" type="java.lang.String">
+            <column name="changecity" />
+        </property>
+    </class>
+</hibernate-mapping>

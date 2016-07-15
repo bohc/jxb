@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.bohc.sh.entities.Tarea" table="tarea">
+        <id name="aid" type="int">
+            <column name="AID" />
+            <generator class="native" />
+        </id>
+        <property name="acode" type="java.lang.String">
+            <column name="ACODE" />
+        </property>
+        <property name="ircode" type="java.lang.String">
+            <column name="IRCODE" />
+        </property>
+        <property name="area" type="java.lang.String">
+            <column name="AREA" />
+        </property>
+        <property name="areapy" type="java.lang.String">
+            <column name="AREAPY" />
+        </property>
+        <property name="pid" type="java.lang.String">
+            <column name="PID" />
+        </property>
+        <property name="pname" type="java.lang.String">
+            <column name="PNAME" />
+        </property>
+        <property name="remark" type="java.lang.String">
+            <column name="REMARK" />
+        </property>
+    </class>
+</hibernate-mapping>
