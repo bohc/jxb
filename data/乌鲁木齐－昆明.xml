@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="GBK"?>
+
+<root>
+  <com.bohc.bean.FetchCitys> 
+    <fetchnext>false</fetchnext>  
+    <intervaltime>0</intervaltime>  
+    <fromcitys> 
+      <com.bohc.sh.entities.Tarea> 
+        <aid>354</aid>  
+        <acode>86650100</acode>  
+        <ircode/>  
+        <area>乌鲁木齐</area>  
+        <areapy>wlmq</areapy>  
+        <pid>86650000</pid>  
+        <pname>新疆</pname>  
+        <remark>乌鲁木齐</remark> 
+      </com.bohc.sh.entities.Tarea> 
+    </fromcitys>  
+    <tocitys> 
+      <com.bohc.sh.entities.Tarea> 
+        <aid>2</aid>  
+        <acode>86530100</acode>  
+        <ircode/>  
+        <area>昆明</area>  
+        <areapy>km</areapy>  
+        <pid>86530000</pid>  
+        <pname>云南</pname>  
+        <remark>昆明</remark> 
+      </com.bohc.sh.entities.Tarea> 
+    </tocitys> 
+  </com.bohc.bean.FetchCitys>
+</root>
