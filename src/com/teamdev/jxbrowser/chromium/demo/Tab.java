@@ -13,10 +13,17 @@ public class Tab {
 
 	private TabCaption caption;
 	private TabContent content;
+	private boolean closeable = true;
 
 	public Tab(TabCaption caption, TabContent content) {
+		this(caption,content, true);
+	}
+	
+	public Tab(TabCaption caption, TabContent content, boolean closeable) {
+		super();
 		this.caption = caption;
 		this.content = content;
+		this.closeable = closeable;
 	}
 
 	public TabCaption getCaption() {
@@ -29,6 +36,14 @@ public class Tab {
 
 	public void setContent(TabContent content) {
 		this.content = content;
+	}
+
+	public boolean isCloseable() {
+		return closeable;
+	}
+
+	public void setCloseable(boolean closeable) {
+		this.closeable = closeable;
 	}
 
 }

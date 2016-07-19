@@ -204,7 +204,7 @@ public class FetchFlyTicketS extends Thread {
 				Tab tct = TabFactory.createTab("about:blanck");
 				bt.addTab(tct);
 				bt.selectTab(tct);
-				browser = bt.tabs.get(0).getContent().browserView.getBrowser();
+				browser = bt.tabs.get(1).getContent().browserView.getBrowser();
 				if (BaseIni.fetchCitys.getCururl() == 1) {
 					browser.loadURL(BaseIni.fetchAirLine.getUrl());
 				} else if (BaseIni.fetchCitys.getCururl() == 2) {

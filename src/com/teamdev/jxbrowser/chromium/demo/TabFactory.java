@@ -38,6 +38,10 @@ public final class TabFactory {
 	}
 
 	public static Tab createTab(String url, String proxyip, int proxyport) {
+		return createTab(url, proxyip, proxyport, true);
+	}
+
+	public static Tab createTab(String url, String proxyip, int proxyport, boolean closeable) {
 		Browser browser = null;
 		if (proxyip == null || proxyip.equals("")) {
 			browser = new Browser();
@@ -63,6 +67,6 @@ public final class TabFactory {
 			}
 		});
 		browser.loadURL(url);
-		return new Tab(tabCaption, tabContent);
+		return new Tab(tabCaption, tabContent, closeable);
 	}
 }

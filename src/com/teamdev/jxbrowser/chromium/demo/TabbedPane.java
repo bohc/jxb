@@ -46,6 +46,8 @@ public class TabbedPane extends JPanel {
 	}
 
 	private void disposeTab(Tab tab) {
+		if (!tab.isCloseable())
+			return;
 		if (tab.getContent().browserView != null) {
 			Browser browser = tab.getContent().browserView.getBrowser();
 			if (browser != null) {

@@ -77,7 +77,7 @@ public class JxBrowserDemo {
 
 		final TabbedPane tabbedPane = new TabbedPane();
 		bt = tabbedPane;
-		insertTab(tabbedPane, TabFactory.createFirstTab());
+		insertTab(tabbedPane, TabFactory.createTab("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm",null, 0, false));
 		insertNewTabButton(tabbedPane);
 
 		final TabbedPane mYTabbedPane = new TabbedPane();
