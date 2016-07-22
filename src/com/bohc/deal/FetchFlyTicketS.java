@@ -103,8 +103,8 @@ public class FetchFlyTicketS extends Thread {
 						fetchAirLineb.setTocityjm(fcity.getAcode());
 						fetchAirLineb.setUrl(gurl + "/twell/flight/Search.jsp?from=flight_dom_search&searchType=OnewayFlight&fromCity=" + tcity.getArea().trim() + "&toCity=" + fcity.getArea().trim() + "&fromDate="
 								+ df.format(fdate) + "&toDate=" + df.format(tdate));
-						fetchAirLineb.setAliyurl("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm?searchBy=1280&tripType=0&depCityName=" + fcity.getArea().trim() + "&depCity=" + fcity.getIrcode() + "&arrCityName="
-								+ tcity.getArea().trim() + "&arrCity=" + tcity.getIrcode() + "&depDate=" + df.format(fdate) + "&arrDate=");
+						fetchAirLineb.setAliyurl("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm?searchBy=1280&tripType=0&depCityName=" + fcity.getArea().trim() + "&depCity=" + fcity.getIrcode()
+								+ "&arrCityName=" + tcity.getArea().trim() + "&arrCity=" + tcity.getIrcode() + "&depDate=" + df.format(fdate) + "&arrDate=");
 						list.add(fetchAirLineb);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -121,8 +121,8 @@ public class FetchFlyTicketS extends Thread {
 								FetchAirLine fetchAirLinebo = (FetchAirLine) BeanUtils.cloneBean(fetchAirLineb);
 								fetchAirLinebo.setUrl(gurl + "/twell/flight/Search.jsp?from=flight_dom_search&searchType=OnewayFlight&fromCity=" + tcity.getArea().trim() + "&toCity=" + fcity.getArea().trim()
 										+ "&fromDate=" + df.format(fdate) + "&toDate=" + df.format(tdate));
-								fetchAirLinebo.setAliyurl("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm?searchBy=1280&tripType=0&depCityName=" + fcity.getArea().trim() + "&depCity=" + fcity.getIrcode() + "&arrCityName="
-										+ tcity.getArea().trim() + "&arrCity=" + tcity.getIrcode() + "&depDate=" + df.format(fdate) + "&arrDate=");
+								fetchAirLinebo.setAliyurl("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm?searchBy=1280&tripType=0&depCityName=" + fcity.getArea().trim() + "&depCity=" + fcity.getIrcode()
+										+ "&arrCityName=" + tcity.getArea().trim() + "&arrCity=" + tcity.getIrcode() + "&depDate=" + df.format(fdate) + "&arrDate=");
 								fetchAirLinebo.setFlydate(fdate);
 								list.add(fetchAirLinebo);
 							} catch (Exception e) {
@@ -217,8 +217,9 @@ public class FetchFlyTicketS extends Thread {
 					BaseIni.rlist.clear();
 					BaseIni.flist.clear();
 				}
-				// 对抓取的页面做时间判断，如果超时，那么自动跳到下一个
-				searchFlight();
+				// 对抓取的页面做时间判断，如果超时，那么自动跳到下一个,当前先注释了
+				// searchFlight();
+				
 				// 判断当前有没有数据在取，如果有大于１的任务，那么等待
 				while (BaseIni.browserListenerCount > 0) {
 					try {
