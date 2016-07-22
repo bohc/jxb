@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.hibernate.SQLQuery;
 import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,6 @@ public class FlyTicketDaoImpl extends BaseDao implements FlyTicketDao {
 	@Override
 	public void save(String cond) {
 		final String sql = cond;
-
 		getSession().doWork(new Work() {
 			@Override
 			public void execute(Connection conn) throws SQLException {
@@ -37,6 +37,12 @@ public class FlyTicketDaoImpl extends BaseDao implements FlyTicketDao {
 				cs.close();
 			}
 		});
+	}
+
+	@Override
+	public void deleteBeforeYesterday() {
+		String sql = "delete from flyticket where DATE_FORMAT(opttime,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d')";
+		getSession().createSQLQuery(sql).executeUpdate();
 	}
 
 }

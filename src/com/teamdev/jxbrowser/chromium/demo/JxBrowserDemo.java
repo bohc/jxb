@@ -31,6 +31,7 @@ import javax.swing.text.BadLocationException;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import com.bohc.bean.BaseIni;
+import com.bohc.bean.action.QlyFlyTicketAction;
 import com.bohc.deal.FetchFlyTicketJs;
 import com.bohc.deal.FetchFlyTicketS;
 import com.bohc.deal.FetchFlyTicketTest;
@@ -59,12 +60,23 @@ public class JxBrowserDemo {
 		JPopupMenu.setDefaultLightWeightPopupEnabled(false);
 	}
 
+	private static void deleteBeforeYesterday() {
+		new Thread(new Runnable() {
+			public void run() {
+				jd.updateUi("正在删除当前时间之前的机票数据");
+				QlyFlyTicketAction.instance().deleteBeforeYesterday();
+				jd.updateUi("当前时间之前的机票数据删除完成");
+			}
+		}).start();
+	}
+
 	public static void main(String[] args) throws Exception {
 		initEnvironment();
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				jd = new JxBrowserDemo();
 				jd.initAndDisplayUI();
+				deleteBeforeYesterday();
 			}
 		});
 	}
@@ -77,7 +89,7 @@ public class JxBrowserDemo {
 
 		final TabbedPane tabbedPane = new TabbedPane();
 		bt = tabbedPane;
-		insertTab(tabbedPane, TabFactory.createTab("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm",null, 0, false));
+		insertTab(tabbedPane, TabFactory.createTab("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm", null, 0, false));
 		insertNewTabButton(tabbedPane);
 
 		final TabbedPane mYTabbedPane = new TabbedPane();
@@ -227,7 +239,7 @@ public class JxBrowserDemo {
 			}
 		});
 		panel.add(btnNewButton_5);
-		
+
 		JButton btnTest = new JButton("test");
 		btnTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -267,9 +279,9 @@ public class JxBrowserDemo {
 							Point p = new Point();
 							p.setLocation(0, BaseIni.logview.getLineCount() * height);
 							BaseIni.logscroll.getViewport().setViewPosition(p);
-							if(BaseIni.logview.isFocusable()){
-								//requestFocus();
-								BaseIni.logview.select(BaseIni.logview.getDocument().getLength(), BaseIni.logview.getDocument().getLength()); 
+							if (BaseIni.logview.isFocusable()) {
+								// requestFocus();
+								BaseIni.logview.select(BaseIni.logview.getDocument().getLength(), BaseIni.logview.getDocument().getLength());
 							}
 						}
 					}

@@ -28,4 +28,8 @@ public class QlyFlyticketServiceImpl implements QlyFlyticketService {
 	public void save(String cond) {
 		flyticketdao.save(cond);
 	}
+	@Override
+	public void deleteBeforeYesterday() {
+		flyticketdao.deleteBeforeYesterday();
+	}
 }

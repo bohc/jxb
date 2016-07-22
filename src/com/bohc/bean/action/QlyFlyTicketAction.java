@@ -13,7 +13,6 @@ public class QlyFlyTicketAction {
 	private static ApplicationContext ctx = null;
 	private static QlyFlyticketService qlyflyticketservice = null;
 	private static QlyFlyTicketAction qlyflyticketaction;
-	private TareaService tareaService;
 	static {
 		if (ctx == null) {
 			ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -32,21 +31,25 @@ public class QlyFlyTicketAction {
 		qlyflyticketservice.save(cond);
 	}
 
-	public TareaService getTareaservice(){
+	public void deleteBeforeYesterday() {
+		qlyflyticketservice.deleteBeforeYesterday();
+	}
+
+	public TareaService getTareaservice() {
 		return (TareaService) ctx.getBean("tareaService");
 	}
-	
+
 	public String combineString(String str) {
 		if (str == null) {
 			return null;
 		}
 		return "'" + str.trim() + "'";
 	}
-	
-	public String combineDate(Date date){
-		if(date==null){
+
+	public String combineDate(Date date) {
+		if (date == null) {
 			return null;
 		}
-		return "'"+(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date))+"'";
+		return "'" + (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)) + "'";
 	}
 }

@@ -6,5 +6,6 @@ public interface QlyFlyticketService {
 
 	public abstract void save(QlyFlyticket qft);
 	public abstract void save(String cond);
+	public abstract void deleteBeforeYesterday();
 
 }
