@@ -420,7 +420,7 @@ public class ParseHtmlAliy {
 			// 航线名称airline-name /[a-zA-Z0-9]+/
 			linename = businese.select("p.airline-name span").first().ownText();
 			qft.setAireline(linename);
-			System.out.println(businese.select("p.airline-name span").first().ownText());
+			//System.out.println(businese.select("p.airline-name span").first().ownText());
 			// 这儿没有旅行专线
 			if (qft.getAireline().trim().equals("旅行专线")) {
 				// 如果为旅行专线，那么没有航班号

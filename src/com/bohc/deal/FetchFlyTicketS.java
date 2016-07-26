@@ -218,7 +218,7 @@ public class FetchFlyTicketS extends Thread {
 					BaseIni.flist.clear();
 				}
 				// 对抓取的页面做时间判断，如果超时，那么自动跳到下一个,当前先注释了
-				// searchFlight();
+				searchFlight();
 				
 				// 判断当前有没有数据在取，如果有大于１的任务，那么等待
 				while (BaseIni.browserListenerCount > 0) {
@@ -251,7 +251,7 @@ public class FetchFlyTicketS extends Thread {
 					if (BaseIni.fetchAirLine.isFetching()) {
 						break;
 					}
-					if ((System.currentTimeMillis() - oldtime) / 1000 >= 30) {
+					if ((System.currentTimeMillis() - oldtime) / 1000 >= (60*10)) {
 						BaseIni.changeCount(false);
 						break;
 					}

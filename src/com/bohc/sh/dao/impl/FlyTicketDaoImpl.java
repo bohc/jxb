@@ -41,7 +41,7 @@ public class FlyTicketDaoImpl extends BaseDao implements FlyTicketDao {
 
 	@Override
 	public void deleteBeforeYesterday() {
-		String sql = "delete from flyticket where DATE_FORMAT(opttime,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d')";
+		String sql = "delete from flyticket where DATE_FORMAT(starttime,'%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d')";
 		getSession().createSQLQuery(sql).executeUpdate();
 	}
 
