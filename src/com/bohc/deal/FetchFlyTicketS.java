@@ -277,10 +277,10 @@ public class FetchFlyTicketS extends Thread {
 		} else {
 			initCity();
 		}
-		//writerList();
+		// writerList();
 		initStack();
-		writeStack();
-		// fetchTicket();
+		// writeStack();
+		fetchTicket();
 		BaseIni.fetchstatus = false;
 		JxBrowserDemo.jd.updateBtn(1, "ץȡ");
 	}
