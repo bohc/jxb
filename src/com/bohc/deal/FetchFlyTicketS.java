@@ -103,8 +103,8 @@ public class FetchFlyTicketS extends Thread {
 						fetchAirLineb.setTocityjm(fcity.getAcode());
 						fetchAirLineb.setUrl(gurl + "/twell/flight/Search.jsp?from=flight_dom_search&searchType=OnewayFlight&fromCity=" + tcity.getArea().trim() + "&toCity=" + fcity.getArea().trim() + "&fromDate="
 								+ df.format(fdate) + "&toDate=" + df.format(tdate));
-						fetchAirLineb.setAliyurl("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm?searchBy=1280&tripType=0&depCityName=" + fcity.getArea().trim() + "&depCity=" + fcity.getIrcode()
-								+ "&arrCityName=" + tcity.getArea().trim() + "&arrCity=" + tcity.getIrcode() + "&depDate=" + df.format(fdate) + "&arrDate=");
+						fetchAirLineb.setAliyurl("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm?searchBy=1280&tripType=0&depCityName=" + tcity.getArea().trim() + "&depCity=" + tcity.getIrcode()
+								+ "&arrCityName=" + fcity.getArea().trim() + "&arrCity=" + fcity.getIrcode() + "&depDate=" + df.format(fdate) + "&arrDate=");
 						list.add(fetchAirLineb);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -219,7 +219,7 @@ public class FetchFlyTicketS extends Thread {
 				}
 				// 对抓取的页面做时间判断，如果超时，那么自动跳到下一个,当前先注释了
 				searchFlight();
-				
+
 				// 判断当前有没有数据在取，如果有大于１的任务，那么等待
 				while (BaseIni.browserListenerCount > 0) {
 					try {
@@ -251,7 +251,7 @@ public class FetchFlyTicketS extends Thread {
 					if (BaseIni.fetchAirLine.isFetching()) {
 						break;
 					}
-					if ((System.currentTimeMillis() - oldtime) / 1000 >= (60*10)) {
+					if ((System.currentTimeMillis() - oldtime) / 1000 >= (60 * 10)) {
 						BaseIni.changeCount(false);
 						break;
 					}
@@ -277,9 +277,10 @@ public class FetchFlyTicketS extends Thread {
 		} else {
 			initCity();
 		}
-		// writerList();
+		//writerList();
 		initStack();
-		fetchTicket();
+		writeStack();
+		// fetchTicket();
 		BaseIni.fetchstatus = false;
 		JxBrowserDemo.jd.updateBtn(1, "抓取");
 	}
@@ -287,8 +288,18 @@ public class FetchFlyTicketS extends Thread {
 	private void writerList() {
 		if (list != null) {
 			for (FetchAirLine fal : list) {
-				System.out.println(fal.getAliyurl());
+				JxBrowserDemo.jd.updateUi(fal.getAliyurl());
 			}
+		}
+	}
+
+	private void writeStack() {
+		while (true) {
+			if (BaseIni.satckAirline.isEmpty()) {
+				break;
+			}
+			FetchAirLine fal = BaseIni.satckAirline.pop();
+			JxBrowserDemo.jd.updateUi(fal.getAliyurl());
 		}
 	}
 
