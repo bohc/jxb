@@ -136,7 +136,7 @@ public class TestBean {
 
 	}
 
-	public static void main(String[] args) {
+	public static void main1(String[] args) {
 		String str = "起飞时段：21:05 ~ 21:50";
 		Pattern p = Pattern.compile("[0-9]?[0-9]:[0-9]?[0-9]");
 
@@ -165,5 +165,22 @@ public class TestBean {
 			}
 			System.out.println("当前数是："+curfetchnum);
 		}
+	}
+	
+	/**
+	 * 取字串中的数字
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static String fetchNumberFromString(String str) {
+		String regEx = "([^0-9][\\d+])";
+		Pattern p = Pattern.compile(regEx);
+		Matcher m = p.matcher(str);
+		return m.replaceAll("").trim();
+	}
+	
+	public static void main(String[] args){
+		System.out.println(fetchNumberFromString("1.02克"));
 	}
 }
