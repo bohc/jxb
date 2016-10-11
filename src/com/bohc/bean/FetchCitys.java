@@ -12,7 +12,8 @@ public class FetchCitys {
 	private int overupnum = 0;// 回程多抓取的天数
 	private int rate = 0;// 浮动价格
 	private boolean fetchnext = false;// 抓取第二层
-	private int intervaltime = 0;// 抓到间隔时间
+	private int intervaltime = 2;// 抓到间隔时间
+	private int intervaltimeend = 6;// 抓到间隔时间
 	private List<Tarea> fromcitys = new ArrayList<Tarea>();// 出发城市
 	private List<Tarea> tocitys = new ArrayList<Tarea>();// 到达城市
 	private boolean ckgxhb;// 共享航班
@@ -67,6 +68,14 @@ public class FetchCitys {
 
 	public void setIntervaltime(int intervaltime) {
 		this.intervaltime = intervaltime;
+	}
+
+	public int getIntervaltimeend() {
+		return intervaltimeend;
+	}
+
+	public void setIntervaltimeend(int intervaltimeend) {
+		this.intervaltimeend = intervaltimeend;
 	}
 
 	public Date getStartdate() {

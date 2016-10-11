@@ -79,7 +79,7 @@ public class CheckHtmlIsLoad {
 		}
 		DOMElement doc = null;
 		String content = null;
-		doc = parseAllData(browser, "hdivResultPanel");
+		doc = parseAllDataByClassName(browser, "mb-10");
 		if (doc != null) {
 			content = doc.getInnerHTML();
 		}
@@ -210,13 +210,13 @@ public class CheckHtmlIsLoad {
 			execJsFilterTime(browser, 3, "晚上");
 		}
 		if (timeflag) {// 如果早，中，下，晚一个都没有选，那么取当前页面的所有航班
-			fetchAllLine(parseAllData(browser, "hdivResultPanel"));
+			fetchAllLine(parseAllDataByClassName(browser, "mb-10"));
 		}
 	}
 
 	private void parseHtmlNoFilterTime(Browser browser) throws MyParseException {
 		// 如果早，中，下，晚一个都没有选，那么取当前页面的所有航班
-		fetchAllLine(parseAllData(browser, "hdivResultPanel"));
+		fetchAllLine(parseAllDataByClassName(browser, "mb-10"));
 	}
 
 	// 执行 js 按航班过滤数据
@@ -253,7 +253,7 @@ public class CheckHtmlIsLoad {
 		}
 
 		// 取出数据
-		fetchAllLine(parseAllData(browser, "hdivResultPanel"));
+		fetchAllLine(parseAllDataByClassName(browser, "mb-10"));
 
 		js.setLength(0);
 		js.append("var cs = document.getElementsByTagName('input');");
@@ -270,6 +270,7 @@ public class CheckHtmlIsLoad {
 		}
 	}
 
+	// 按ID来取
 	private DOMElement parseAllData(Browser browser, String vid) throws MyParseException {
 		// 取出数据
 		DOMElement doc = null;
@@ -277,6 +278,28 @@ public class CheckHtmlIsLoad {
 			long oldtime = System.currentTimeMillis();
 			while (true) {
 				doc = browser.getDocument().findElement(By.id(vid));
+				if (doc != null) {
+					break;
+				}
+				if ((System.currentTimeMillis() - oldtime) / 1000 > 10) {
+					break;
+				}
+				Thread.sleep(1000);
+			}
+		} catch (Exception e) {
+			throwMyException("页面解析异常");
+		}
+		return doc;
+	}
+
+	// 按类名取
+	private DOMElement parseAllDataByClassName(Browser browser, String cname) throws MyParseException {
+		// 取出数据
+		DOMElement doc = null;
+		try {
+			long oldtime = System.currentTimeMillis();
+			while (true) {
+				doc = browser.getDocument().findElement(By.className(cname));
 				if (doc != null) {
 					break;
 				}
@@ -522,7 +545,7 @@ public class CheckHtmlIsLoad {
 			return;
 		Document document = Jsoup.parse(doc.getInnerHTML());
 		// 得到所有包含航线的 div 元素
-		Elements businesses = document.select("div.avt-column");
+		Elements businesses = document.select("div.b-airfly");
 		int size = businesses.size();
 
 		Calendar calendar = Calendar.getInstance();
@@ -541,9 +564,10 @@ public class CheckHtmlIsLoad {
 			qft.setOpttime(new Date());
 			// 出发时间
 			String starttime = "";
-
+			// System.out.println(businese.html());
 			// 航线名称
-			qft.setAireline(businese.select("div.a-name").first().ownText());
+			String airtitle = businese.select("div.col-airline div.air span").first().ownText();
+			qft.setAireline(airtitle);
 			if (qft.getAireline().trim().equals("旅行专线")) {
 				// 如果为旅行专线，那么没有航班号
 				qft.setFltno("待定");
@@ -558,21 +582,22 @@ public class CheckHtmlIsLoad {
 				}
 			} else {
 				// 得到航班号
-				qft.setFltno(businese.select("div.a-model").first().select("span").first().ownText());
-				// 和到发出时间
-				starttime = businese.select("div.a-dep-time").first().ownText();
+				qft.setFltno(businese.select("div.col-airline div.num span").first().ownText());
+				// 得到发出时间
+				starttime = businese.select("div.col-time div.sep-lf h2").first().ownText();
 				// 航班类型
-				qft.setAirtype(businese.select("div.a-model").first().select("span").get(1).ownText());
+				qft.setAirtype(businese.select("div.col-airline div.num span").get(1).ownText());
 				// 出发机场
-				qft.setStartairport(businese.select("div.a-dep-airport").first().ownText());
+				qft.setStartairport(businese.select("div.col-time div.sep-lf span").first().ownText());
 				// 到达机场
-				qft.setArriveairport(businese.select("div.a-arr-airport").first().ownText());
+				qft.setArriveairport(businese.select("div.col-time div.sep-rt span").first().ownText());
 			}
 
 			// 得到航线票价
-			Elements prcs = businese.select("span.prc_wp");
-			if (prcs.size() > 0) {
+			Elements prcs = businese.select("div.col-price p.prc span.prc_wp");
+			if (prcs != null && prcs.first() != null) {
 				String fprice = getPriceNew(prcs.first());
+				System.out.println(qft.getFltno() + "\t" + fprice + "\t" + prcs.first().html());
 				try {
 					qft.setTicketprice(Integer.parseInt(fprice) + BaseIni.fetchCitys.getRate());
 				} catch (NumberFormatException e) {
@@ -586,7 +611,7 @@ public class CheckHtmlIsLoad {
 			}
 
 			// 取共享航班
-			Elements lnk_a = businese.select("div.n-gx-tit");
+			Elements lnk_a = businese.select("div.col-airline div.num span.g-tips span");
 			if (lnk_a != null && lnk_a.first() != null && lnk_a.first().ownText().trim().equals("共享")) {
 				qft.setShareline("共享");
 			} else {
@@ -595,19 +620,12 @@ public class CheckHtmlIsLoad {
 
 			// 取头等舱
 			int flag = 0;
-			Elements i_fst_cls = businese.select("a.tag-wp");
-			if (i_fst_cls.size() > 0) {
-				i_fst_cls = i_fst_cls.select("i.tag-name");
-				if (i_fst_cls.size() > 0) {
-					for (int i = 0; i < i_fst_cls.size(); i++) {
-						if (i_fst_cls.get(i).ownText().trim().equals("头等舱")) {
-							flag = 1;
-							break;
-						} else if (i_fst_cls.get(i).ownText().trim().equals("商务舱")) {
-							flag = 2;
-							break;
-						}
-					}
+			Elements i_fst_cls = businese.select("div.col-airline div.vim span.v");
+			if (i_fst_cls != null && i_fst_cls.first() != null) {
+				if (i_fst_cls.get(0).ownText().trim().equals("头等舱")) {
+					flag = 1;
+				} else if (i_fst_cls.get(0).ownText().trim().equals("商务舱")) {
+					flag = 2;
 				}
 			}
 			if (flag == 1) {
@@ -619,34 +637,19 @@ public class CheckHtmlIsLoad {
 			}
 
 			// 如果是中转航班，那么在价格上加上100
-			Elements zz = businese.select("div.c3").first().select("div.a-zh-wp");
-			if (zz != null && zz.size() > 0) {
-				Elements zn = zz.first().select("i.z");
-				if (zn != null && zn.first() != null) {
-					if (zn.size() == 1) {
-						if (zn.first().ownText().trim().equals("停")) {
-							qft.setLinetype("经停");
-						} else if (zn.first().ownText().trim().equals("转")) {
-							if (qft.getTicketprice() > 0) {
-								qft.setTicketprice(qft.getTicketprice() + 100 + BaseIni.fetchCitys.getRate());
-							}
-						}
-						zn = businese.select("div.air-wp");
-						if (zn.size() > 1) {
-							qft.setLinetype("中转");
-							qft.setChangeflyno(zn.get(1).select("span.n").first().ownText());
-						}
-						zn = businese.select("div.ifo");
-						if (zn.size() > 0) {
-							qft.setChangecity(zn.first().ownText());
-						}
-					} else {
-						qft.setLinetype("转停");
+			Elements zz = businese.select("div.col-time div.trans div.g-tips span.t span");
+			if (zz != null && zz.first() != null) {
+				if (zz.first().ownText().trim().equals("停")) {
+					qft.setLinetype("经停");
+					qft.setChangecity(zz.get(1).ownText());
+				} else if (zz.first().ownText().trim().equals("转")) {
+					if (qft.getTicketprice() > 0) {
+						qft.setTicketprice(qft.getTicketprice() + 100 + BaseIni.fetchCitys.getRate());
 					}
-				} else {
-					qft.setLinetype("直达");
+					qft.setLinetype("中转");
+					qft.setChangecity(zz.get(1).ownText());
 				}
-			}else{
+			} else {
 				qft.setLinetype("直达");
 			}
 
@@ -658,7 +661,7 @@ public class CheckHtmlIsLoad {
 				qft.setStarttime(calendar.getTime());
 
 				if (!qft.getFltno().trim().equals("待定")) {
-					String arrivetime = businese.select("div.a-arr-time").first().ownText();
+					String arrivetime = businese.select("div.col-time div.sep-rt h2").first().ownText();
 					calendar.setTime(BaseIni.fetchAirLine.getFlydate());
 					if (compareString(starttime, arrivetime)) {
 						calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
@@ -675,20 +678,20 @@ public class CheckHtmlIsLoad {
 
 			// 得到航班的准点率，有的航班可能没有，所以加个出错处理
 			try {
-				Elements es = businese.select("p.a-pty-mint");
-				if (es.size() > 0) {
-					qft.setOffsetrate(es.first().ownText());
-					qft.setOffsettime(es.last().ownText());
-				}
+				// Elements es = businese.select("p.a-pty-mint");
+				// if (es.size() > 0) {
+				// qft.setOffsetrate(es.first().ownText());
+				// qft.setOffsettime(es.last().ownText());
+				// }
 			} catch (Exception e) {
 				System.out.println("航班准点率没有：" + e.getMessage());
 			}
 
 			// 代理售票点，有的可能也没有
-			Elements els = businese.select("p.rec-name");
-			if (els.size() > 0) {
-				qft.setAgent(els.first().text());
-			}
+			// Elements els = businese.select("p.rec-name");
+			// if (els.size() > 0) {
+			// qft.setAgent(els.first().text());
+			// }
 			BaseIni.rlist.add(qft);
 		}
 	}
@@ -875,8 +878,8 @@ public class CheckHtmlIsLoad {
 		String businesse_prc = Pattern.compile("[^0-9]").matcher(e.first().text()).replaceAll("");
 
 		// 纠正价格信息
-		for (int i = 0; i < (Integer.parseInt(pos) / 16); i++) {
-			int p = Integer.parseInt(pos) - (i * 16);
+		for (int i = 0; i < (Integer.parseInt(pos) / 18); i++) {
+			int p = Integer.parseInt(pos) - (i * 18);
 			e = prc.getElementsByAttributeValue("style", "left:-" + p + "px");
 			if (e.size() > 0) {
 				businesse_prc = businesse_prc.substring(0, i) + e.text() + businesse_prc.substring(i + 1);

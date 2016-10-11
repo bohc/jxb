@@ -75,6 +75,7 @@ public class MyTabSetting extends MyTabContent {
 	private JCheckBox ck_morning, ck_noon, ck_anoon, ck_evening;
 	private JCheckBox ck_fetch_aliy, ck_fetch_qunar;
 	private JSpinner flag_fetch_rand_min, flag_fetch_rand_max;
+	private JTextField intervaltiimeend;
 
 	public MyTabSetting() {
 		setLayout(new BorderLayout(0, 0));
@@ -116,6 +117,7 @@ public class MyTabSetting extends MyTabContent {
 				BaseIni.fetchCitys.setCkp0(ck_p0.isSelected());
 				BaseIni.fetchCitys.setOverupnum(Integer.parseInt(fetch_day.getValue().toString()));
 				BaseIni.fetchCitys.setIntervaltime(Integer.parseInt(intervaltiime.getText()));
+				BaseIni.fetchCitys.setIntervaltimeend(Integer.parseInt(intervaltiimeend.getText()));
 				BaseIni.fetchCitys.setRate(Integer.parseInt(txt_rate.getText()));
 				BaseIni.fetchCitys.setFlagfetchrandmax(Integer.parseInt(flag_fetch_rand_max.getValue().toString()));
 				BaseIni.fetchCitys.setFlagfetchrandmin(Integer.parseInt(flag_fetch_rand_max.getValue().toString()));
@@ -205,7 +207,15 @@ public class MyTabSetting extends MyTabContent {
 		intervaltiime = new JTextField();
 		panel_5.add(intervaltiime);
 		intervaltiime.setColumns(4);
-		intervaltiime.setText("3");
+		intervaltiime.setText("2");
+		
+		JLabel label_7 = new JLabel("\u81F3");
+		panel_5.add(label_7);
+		
+		intervaltiimeend = new JTextField();
+		intervaltiimeend.setText("6");
+		panel_5.add(intervaltiimeend);
+		intervaltiimeend.setColumns(4);
 
 		JLabel label_1 = new JLabel("\u8D77\u59CB\u65E5\u671F\uFF1A");
 		panel_5.add(label_1);

@@ -34,7 +34,6 @@ import com.bohc.bean.BaseIni;
 import com.bohc.bean.action.QlyFlyTicketAction;
 import com.bohc.deal.FetchFlyTicketJs;
 import com.bohc.deal.FetchFlyTicketS;
-import com.bohc.deal.FetchFlyTicketTest;
 import com.bohc.deal.ValidateProxyIp;
 import com.bohc.parsehtml.ParseContent;
 import com.bohc.view.MyTabFactory;
@@ -243,7 +242,8 @@ public class JxBrowserDemo {
 		JButton btnTest = new JButton("test");
 		btnTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				FetchFlyTicketTest ft = new FetchFlyTicketTest(bt);
+				FetchFlyTicketS ft = new FetchFlyTicketS(bt);
+				ft.setFetchc(1);
 				ft.start();
 				BaseIni.fetchstatus = true;
 				btnfetch.setEnabled(false);

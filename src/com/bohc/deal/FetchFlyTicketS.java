@@ -30,6 +30,7 @@ public class FetchFlyTicketS extends Thread {
 	List<Tarea> tocity = null;
 	boolean loadover = false;
 	QlyFlyticket qt;
+	int fetchc = 0;
 
 	public FetchFlyTicketS(TabbedPane bt) {
 		super();
@@ -51,9 +52,11 @@ public class FetchFlyTicketS extends Thread {
 	}
 
 	/**
-	 * @wbp.parser.entryPoint
+	 * @wbp.parser.entryPoint flag 如果是0，那么忽略不计，如果大于0，那么只拼接flag指定的条数
 	 */
-	public void initCity() {
+	public void initCity(int flag) {
+		String qunarurl = "/twell/flight/Search.jsp?from=flight_dom_search&searchType=OnewayFlight";
+		String twellurl = "https://sjipiao.alitrip.com/homeow/trip_flight_search.htm?searchBy=1280&tripType=0";
 		list = new ArrayList<FetchAirLine>();
 		Calendar c = Calendar.getInstance(Locale.getDefault());
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -81,12 +84,11 @@ public class FetchFlyTicketS extends Thread {
 					Date fdate = c.getTime();
 					c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) + 1);
 					Date tdate = c.getTime();
-
+					// 来程
 					FetchAirLine fetchAirLine = new FetchAirLine();
-					fetchAirLine.setUrl(gurl + "/twell/flight/Search.jsp?from=flight_dom_search&searchType=OnewayFlight&fromCity=" + fcity.getArea().trim() + "&toCity=" + tcity.getArea().trim() + "&fromDate="
-							+ df.format(fdate) + "&toDate=" + df.format(tdate));
-					fetchAirLine.setAliyurl("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm?searchBy=1280&tripType=0&depCityName=" + fcity.getArea().trim() + "&depCity=" + fcity.getIrcode() + "&arrCityName="
-							+ tcity.getArea().trim() + "&arrCity=" + tcity.getIrcode() + "&depDate=" + df.format(fdate) + "&arrDate=");
+					fetchAirLine.setUrl(gurl + qunarurl + "&fromCity=" + fcity.getArea().trim() + "&toCity=" + tcity.getArea().trim() + "&fromDate=" + df.format(fdate) + "&toDate=" + df.format(tdate));
+					fetchAirLine.setAliyurl(twellurl + "&depCityName=" + fcity.getArea().trim() + "&depCity=" + fcity.getIrcode() + "&arrCityName=" + tcity.getArea().trim() + "&arrCity=" + tcity.getIrcode() + "&depDate="
+							+ df.format(fdate) + "&arrDate=");
 					fetchAirLine.setFlydate(fdate);
 					fetchAirLine.setFromcity(fcity.getArea());
 					fetchAirLine.setFromcityjm(fcity.getAcode());
@@ -94,6 +96,7 @@ public class FetchFlyTicketS extends Thread {
 					fetchAirLine.setTocityjm(tcity.getAcode());
 					list.add(fetchAirLine);
 
+					// 回程
 					FetchAirLine fetchAirLineb = null;
 					try {
 						fetchAirLineb = (FetchAirLine) BeanUtils.cloneBean(fetchAirLine);
@@ -101,14 +104,21 @@ public class FetchFlyTicketS extends Thread {
 						fetchAirLineb.setFromcityjm(tcity.getAcode());
 						fetchAirLineb.setTocity(fcity.getArea());
 						fetchAirLineb.setTocityjm(fcity.getAcode());
-						fetchAirLineb.setUrl(gurl + "/twell/flight/Search.jsp?from=flight_dom_search&searchType=OnewayFlight&fromCity=" + tcity.getArea().trim() + "&toCity=" + fcity.getArea().trim() + "&fromDate="
-								+ df.format(fdate) + "&toDate=" + df.format(tdate));
-						fetchAirLineb.setAliyurl("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm?searchBy=1280&tripType=0&depCityName=" + tcity.getArea().trim() + "&depCity=" + tcity.getIrcode()
-								+ "&arrCityName=" + fcity.getArea().trim() + "&arrCity=" + fcity.getIrcode() + "&depDate=" + df.format(fdate) + "&arrDate=");
+						fetchAirLineb.setUrl(gurl + qunarurl + "&fromCity=" + tcity.getArea().trim() + "&toCity=" + fcity.getArea().trim() + "&fromDate=" + df.format(fdate) + "&toDate=" + df.format(tdate));
+						fetchAirLineb.setAliyurl(twellurl + "&depCityName=" + tcity.getArea().trim() + "&depCity=" + tcity.getIrcode() + "&arrCityName=" + fcity.getArea().trim() + "&arrCity=" + fcity.getIrcode()
+								+ "&depDate=" + df.format(fdate) + "&arrDate=");
 						list.add(fetchAirLineb);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					System.out.println(fetchAirLine.getUrl());
+					if (flag > 0) {
+						if (list.size() >= flag) {
+							return;
+						}
+					}
+
+					// 往后多抓取的回程天数
 					if (i == (fetchday - 1)) {
 						int bnum = BaseIni.fetchCitys.getOverupnum();
 						for (int b = 0; b < bnum; b++) {
@@ -119,10 +129,9 @@ public class FetchFlyTicketS extends Thread {
 							tdate = c.getTime();
 							try {
 								FetchAirLine fetchAirLinebo = (FetchAirLine) BeanUtils.cloneBean(fetchAirLineb);
-								fetchAirLinebo.setUrl(gurl + "/twell/flight/Search.jsp?from=flight_dom_search&searchType=OnewayFlight&fromCity=" + tcity.getArea().trim() + "&toCity=" + fcity.getArea().trim()
-										+ "&fromDate=" + df.format(fdate) + "&toDate=" + df.format(tdate));
-								fetchAirLinebo.setAliyurl("https://sjipiao.alitrip.com/homeow/trip_flight_search.htm?searchBy=1280&tripType=0&depCityName=" + fcity.getArea().trim() + "&depCity=" + fcity.getIrcode()
-										+ "&arrCityName=" + tcity.getArea().trim() + "&arrCity=" + tcity.getIrcode() + "&depDate=" + df.format(fdate) + "&arrDate=");
+								fetchAirLinebo.setUrl(gurl + qunarurl + "&fromCity=" + tcity.getArea().trim() + "&toCity=" + fcity.getArea().trim() + "&fromDate=" + df.format(fdate) + "&toDate=" + df.format(tdate));
+								fetchAirLinebo.setAliyurl(twellurl + "&depCityName=" + fcity.getArea().trim() + "&depCity=" + fcity.getIrcode() + "&arrCityName=" + tcity.getArea().trim() + "&arrCity=" + tcity.getIrcode()
+										+ "&depDate=" + df.format(fdate) + "&arrDate=");
 								fetchAirLinebo.setFlydate(fdate);
 								list.add(fetchAirLinebo);
 							} catch (Exception e) {
@@ -147,16 +156,17 @@ public class FetchFlyTicketS extends Thread {
 
 		if (BaseIni.fetchCitys.isCk_fetch_qunar() || BaseIni.fetchCitys.isCk_fetch_aliy()) {
 			int intervaltime = BaseIni.fetchCitys.getIntervaltime();
+			int intervaltimeend = BaseIni.fetchCitys.getIntervaltimeend();
 			int i = 0;
 			long oldtime = System.currentTimeMillis();
 			int curfetchnum = 3;// 默认从3条开始
+			Random random = new Random();
 			while (true) {
 				// 判断是否是第一个，如果不是，那么给出随机间隔，如是不是第一个，那么判断，添加合理的抓取地址
 				if (BaseIni.fetchCitys.isCk_fetch_qunar() && BaseIni.fetchCitys.isCk_fetch_aliy()) {
 					if (curfetchnum == 0) {
 						int max = BaseIni.fetchCitys.getFlagfetchrandmax();
 						int min = BaseIni.fetchCitys.getFlagfetchrandmin();
-						Random random = new Random();
 						curfetchnum = random.nextInt(max) % (max - min + 1) + min;
 						JxBrowserDemo.jd.updateUi("当前间隔 " + curfetchnum + " 条");
 						if (BaseIni.fetchCitys.getCururl() == 2) {
@@ -190,8 +200,11 @@ public class FetchFlyTicketS extends Thread {
 
 				// 上一个数据取完后，根据界面的设定，间隔一段时间再来取数据
 				try {
-					if (i > 0)
-						Thread.sleep(1000 * intervaltime);
+					if (i > 0) {
+						int fintervaltime = random.nextInt(intervaltimeend) % (intervaltimeend - intervaltime + 1) + intervaltime;
+						JxBrowserDemo.jd.updateUi("间隔" + fintervaltime + "秒后继续下一条抓取");
+						Thread.sleep(1000 * fintervaltime);
+					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -275,7 +288,7 @@ public class FetchFlyTicketS extends Thread {
 			list = BaseIni.fetchFailList;
 			BaseIni.fetchFailList.clear();
 		} else {
-			initCity();
+			initCity(fetchc);
 		}
 		// writerList();
 		initStack();
@@ -303,11 +316,15 @@ public class FetchFlyTicketS extends Thread {
 		}
 	}
 
+	public void setFetchc(int fetchc) {
+		this.fetchc = fetchc;
+	}
+
 	/**
 	 * @wbp.parser.entryPoint
 	 */
 	public static void main(String[] args) {
 		FetchFlyTicketS fft = new FetchFlyTicketS(null);
-		fft.initCity();
+		fft.initCity(fft.fetchc);
 	}
 }
