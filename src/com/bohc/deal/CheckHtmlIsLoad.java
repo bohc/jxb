@@ -597,7 +597,7 @@ public class CheckHtmlIsLoad {
 			Elements prcs = businese.select("div.col-price p.prc span.prc_wp");
 			if (prcs != null && prcs.first() != null) {
 				String fprice = getPriceNew(prcs.first());
-				System.out.println(qft.getFltno() + "\t" + fprice + "\t" + prcs.first().html());
+//				System.out.println(qft.getFltno() + "\t" + fprice + "\t" + prcs.first().html());
 				try {
 					qft.setTicketprice(Integer.parseInt(fprice) + BaseIni.fetchCitys.getRate());
 				} catch (NumberFormatException e) {
