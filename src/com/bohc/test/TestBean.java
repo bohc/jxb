@@ -16,14 +16,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
-import com.bohc.bean.BaseIni;
 import com.bohc.sh.dao.FlyTicketDao;
 import com.bohc.sh.entities.QlyFlyticket;
 import com.bohc.sh.entities.Tarea;
 import com.bohc.sh.service.QlyFlyticketService;
 import com.bohc.sh.service.TareaService;
 import com.bohc.util.FileManger;
-import com.teamdev.jxbrowser.chromium.demo.JxBrowserDemo;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -101,10 +99,10 @@ public class TestBean {
 
 	@Test
 	public void listFile() {
-		File f = new File("D:/wb/cwb/q/qunar_lib");
+		File f = new File("D:/wb/cwb/q/fld_lib");
 		File[] files = f.listFiles();
 		for (File file : files) {
-			System.out.print("qunar_lib/" + file.getName() + ";");
+			System.out.print("fld_lib/" + file.getName() + ";");
 		}
 	}
 

@@ -130,7 +130,7 @@ public class FetchFlyTicketS extends Thread {
 							try {
 								FetchAirLine fetchAirLinebo = (FetchAirLine) BeanUtils.cloneBean(fetchAirLineb);
 								fetchAirLinebo.setUrl(gurl + qunarurl + "&fromCity=" + tcity.getArea().trim() + "&toCity=" + fcity.getArea().trim() + "&fromDate=" + df.format(fdate) + "&toDate=" + df.format(tdate));
-								fetchAirLinebo.setAliyurl(twellurl + "&depCityName=" + fcity.getArea().trim() + "&depCity=" + fcity.getIrcode() + "&arrCityName=" + tcity.getArea().trim() + "&arrCity=" + tcity.getIrcode()
+								fetchAirLinebo.setAliyurl(twellurl + "&depCityName=" + tcity.getArea().trim() + "&depCity=" + tcity.getIrcode() + "&arrCityName=" + fcity.getArea().trim() + "&arrCity=" + fcity.getIrcode()
 										+ "&depDate=" + df.format(fdate) + "&arrDate=");
 								fetchAirLinebo.setFlydate(fdate);
 								list.add(fetchAirLinebo);
