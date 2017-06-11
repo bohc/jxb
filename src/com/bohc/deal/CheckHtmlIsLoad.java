@@ -880,7 +880,7 @@ public class CheckHtmlIsLoad {
 		// 纠正价格信息
 		for (int i = 0; i < (Integer.parseInt(pos) / 18); i++) {
 			int p = Integer.parseInt(pos) - (i * 18);
-			e = prc.getElementsByAttributeValue("style", "left:-" + p + "px");
+			e = prc.getElementsByAttributeValue("style", "width: 18px;left:-" + p + "px");
 			if (e.size() > 0) {
 				businesse_prc = businesse_prc.substring(0, i) + e.text() + businesse_prc.substring(i + 1);
 			}
