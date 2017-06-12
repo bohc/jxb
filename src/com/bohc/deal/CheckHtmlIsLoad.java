@@ -597,7 +597,8 @@ public class CheckHtmlIsLoad {
 			Elements prcs = businese.select("div.col-price p.prc span.prc_wp");
 			if (prcs != null && prcs.first() != null) {
 				String fprice = getPriceNew(prcs.first());
-//				System.out.println(qft.getFltno() + "\t" + fprice + "\t" + prcs.first().html());
+				// System.out.println(qft.getFltno() + "\t" + fprice + "\t" +
+				// prcs.first().html());
 				try {
 					qft.setTicketprice(Integer.parseInt(fprice) + BaseIni.fetchCitys.getRate());
 				} catch (NumberFormatException e) {
@@ -637,18 +638,25 @@ public class CheckHtmlIsLoad {
 			}
 
 			// 如果是中转航班，那么在价格上加上100
-			Elements zz = businese.select("div.col-time div.trans div.g-tips span.t span");
+			Elements zz = businese.select("div.col-time div.trans div.g-tips span.t");
 			if (zz != null && zz.first() != null) {
-				if (zz.first().ownText().trim().equals("停")) {
-					qft.setLinetype("经停");
-					qft.setChangecity(zz.get(1).ownText());
-				} else if (zz.first().ownText().trim().equals("转")) {
-					if (qft.getTicketprice() > 0) {
-						qft.setTicketprice(qft.getTicketprice() + 100 + BaseIni.fetchCitys.getRate());
+				StringBuilder sb = new StringBuilder();
+				for (Element el : zz) {
+					Elements es = el.children();
+					String et = es.get(0).ownText().trim();
+					if (et.equals("停")) {
+						sb.append("经停").append(",");
+						qft.setChangecity(es.get(1).ownText());
+					} else if (et.equals("转")) {
+						if (qft.getTicketprice() > 0) {
+							qft.setTicketprice(qft.getTicketprice() + 100 + BaseIni.fetchCitys.getRate());
+						}
+						sb.append("中转").append(",");
+						qft.setChangecity(es.get(1).ownText());
 					}
-					qft.setLinetype("中转");
-					qft.setChangecity(zz.get(1).ownText());
 				}
+				sb.setLength(sb.length() - 1);
+				qft.setLinetype(sb.toString());
 			} else {
 				qft.setLinetype("直达");
 			}

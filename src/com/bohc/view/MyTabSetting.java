@@ -247,7 +247,7 @@ public class MyTabSetting extends MyTabContent {
 				BaseIni.fetchCitys.setOverupnum(Integer.parseInt(((JSpinner) e.getSource()).getValue().toString()));
 			}
 		});
-		fetch_day.setModel(new SpinnerNumberModel(1, 1, 60, 6));
+		fetch_day.setModel(new SpinnerNumberModel(1, 0, 60, 6));
 
 		JLabel lblNewLabel_2 = new JLabel("\u6D6E\u52A8\u4EF7\u683C");
 		panel_5.add(lblNewLabel_2);

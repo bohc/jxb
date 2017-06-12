@@ -44,7 +44,7 @@ public class FetchFlyTicketS extends Thread {
 	private void initStack() {
 		BaseIni.satckAirline.clear();
 		if (list != null && list.size() > 0) {
-			for (int i = list.size() - 1; i > 0; i--) {
+			for (int i = list.size() - 1; i >= 0; i--) {
 				FetchAirLine fal = list.get(i);
 				BaseIni.satckAirline.push(fal);
 			}
@@ -82,7 +82,7 @@ public class FetchFlyTicketS extends Thread {
 
 				for (int i = 0; i < fetchday; i++) {
 					Date fdate = c.getTime();
-					c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) + 1);
+					c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH));
 					Date tdate = c.getTime();
 					// 来程
 					FetchAirLine fetchAirLine = new FetchAirLine();
@@ -95,7 +95,12 @@ public class FetchFlyTicketS extends Thread {
 					fetchAirLine.setTocity(tcity.getArea());
 					fetchAirLine.setTocityjm(tcity.getAcode());
 					list.add(fetchAirLine);
-
+					if(flag>0){
+						if(list.size()>=flag){
+							return;
+						}
+					}
+					
 					// 回程
 					FetchAirLine fetchAirLineb = null;
 					try {
@@ -112,8 +117,8 @@ public class FetchFlyTicketS extends Thread {
 						e.printStackTrace();
 					}
 					System.out.println(fetchAirLine.getUrl());
-					if (flag > 0) {
-						if (list.size() >= flag) {
+					if(flag>0){
+						if(list.size()>=flag){
 							return;
 						}
 					}
@@ -124,8 +129,8 @@ public class FetchFlyTicketS extends Thread {
 						for (int b = 0; b < bnum; b++) {
 							if (fetchAirLineb == null)
 								break;
-							fdate = c.getTime();
 							c.set(Calendar.DAY_OF_MONTH, c.get(Calendar.DAY_OF_MONTH) + 1);
+							fdate = c.getTime();
 							tdate = c.getTime();
 							try {
 								FetchAirLine fetchAirLinebo = (FetchAirLine) BeanUtils.cloneBean(fetchAirLineb);
